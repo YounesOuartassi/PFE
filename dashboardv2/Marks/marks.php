@@ -37,6 +37,27 @@ if (isset($_POST['update'])) {
         echo "Failed: " . mysqli_error($conn2);
     }
 }
+
+
+if(isset($_POST['add'])){
+    $selectedStudent = $_POST['student-name'];
+    $Maths = $_POST['Maths'];
+    $JAVA = $_POST['JAVA'];
+    $C_lan = $_POST['C_lan'];
+    $Cplusplus = $_POST['Cplusplus'];
+
+    $student = explode(" ", $selectedStudent);
+    $Stu_ID = $student[0];
+
+    $sql3 = "INSERT INTO `markss` (marks_Id , Stu_Id ,Maths, JAVA, C_lan, Cplusplus) VALUES (NULL,'$Stu_ID','$Maths','$JAVA','$C_lan','$Cplusplus')";
+    $result3 = mysqli_query($conn2, $sql3);
+
+    if ($result3) {
+        header("location: marks.php?msg=DATA updated successfully");
+    } else {
+        echo "Failed: " . mysqli_error($conn2);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -208,7 +229,7 @@ if (isset($_POST['update'])) {
 
             </div>
 
-            <div class="modal fade modal-lg" id="marksmodal" tabindex="-1" role="dialog" aria-labelledby="marksmodalLabel" aria-hidden="true">
+            <div class="modal fade modal-lg" id="marksmodal" tabindex="-1" role="dialog" aria-labelledby="marksmodalLabel" >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -231,12 +252,12 @@ if (isset($_POST['update'])) {
                                                     <?php
                                                     @include "../configv2.php";
 
-                                                    $query = "SELECT Stu_Id, First_name, Last_name FROM students WHERE Stu_Id= " . $_GET['Stu_Id'];
+                                                    $query = "SELECT Stu_Id, First_name, Last_name FROM students";
                                                     $result = mysqli_query($conn2, $query);
 
                                                     if (mysqli_num_rows($result) > 0) {
                                                         while ($row = mysqli_fetch_assoc($result)) {
-                                                            echo '<option value="' . $row['Stu_Id'] . '">' . $row['First_name'] . $row['Last_name'] . '</option>';
+                                                            echo '<option value="' . $row['Stu_Id'] . '">' . $row['First_name']. " " . $row['Last_name'] . '</option>';
                                                         }
                                                     }
                                                     ?>
@@ -260,10 +281,8 @@ if (isset($_POST['update'])) {
                                                 <input type="number" class="form-control" name="Cplusplus" placeholder="Enter the C++ Language mark">
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-success" name="submit"> save</button>
+                                                <button type="submit" class="btn btn-success" name="add"> Add</button>
                                                 <a href="marks.php" class="btn btn-danger"> Cancel</a>
-
-
                                             </div>
                                         </div>
                                     </form>
